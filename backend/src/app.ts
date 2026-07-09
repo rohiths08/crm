@@ -36,9 +36,10 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-app.use(cors({ origin: config.nodeEnv === 'production' ? false : true }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(routes);
+app.use('/api/backend', routes);
 app.use(errorHandler);
 
 export default app;
