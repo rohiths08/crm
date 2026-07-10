@@ -4,14 +4,23 @@ An intelligent, production-ready full-stack application that allows users to upl
 
 ## Screenshots
 
-### 1. Landing Page (Hero & Dropzone)
-![Landing Page](./screenshots/landing_page.png)
+### 1. Landing Page
+<img width="1861" height="1008" alt="Screenshot From 2026-07-10 11-41-43" src="https://github.com/user-attachments/assets/90e04c31-aea6-48d6-8e3f-59fe80356d3b" />
 
-### 2. CRM Import Results Dashboard (with Interactive Status & Source Charts)
-![Results Dashboard](./screenshots/results_dashboard.png)
+
+### 2. CRM Import Results Dashboard 
+
+<img width="1861" height="1008" alt="Screenshot From 2026-07-10 11-41-09" src="https://github.com/user-attachments/assets/cb4968f7-928b-420d-bb9d-900c937e9ff8" />
+
+<img width="1861" height="1008" alt="Screenshot From 2026-07-10 11-41-18" src="https://github.com/user-attachments/assets/d0a8fb20-8695-4474-987c-254880646faf" />
+
 
 ### 3. Recent Upload History (with verified record counts)
-![Upload History](./screenshots/upload_history.png)
+<img width="1861" height="1008" alt="image" src="https://github.com/user-attachments/assets/ec6ff0c9-dbca-4489-bf71-adf3cd129f70" />
+
+
+### 4. Processing 
+<img width="1861" height="1008" alt="Screenshot From 2026-07-10 11-32-54" src="https://github.com/user-attachments/assets/a4b5ab7d-d907-454c-863c-d261a0d62bb9" />
 
 ## Features
 
