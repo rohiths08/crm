@@ -100,7 +100,7 @@ export function CSVPreviewTable({ isVisible, headers, rows }: CSVPreviewTablePro
                 >
                   <button
                     onClick={header.column.getToggleSortingHandler()}
-                    className="flex items-center gap-2 hover:text-foreground transition-colors"
+                    className="flex items-center gap-2 hover:text-foreground transition-colors cursor-pointer"
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                     {header.column.getCanSort() && (

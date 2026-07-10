@@ -119,7 +119,7 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
             onClick={handleRemove}
-            className="flex-shrink-0 inline-flex items-center justify-center rounded-lg border border-border bg-card hover:bg-muted hover:border-accent/50 p-2 text-muted-foreground hover:text-foreground transition-all"
+            className="flex-shrink-0 inline-flex items-center justify-center rounded-lg border border-border bg-card hover:bg-muted hover:border-accent/50 p-2 text-muted-foreground hover:text-foreground transition-all cursor-pointer"
             aria-label="Remove file"
           >
             <X className="h-4 w-4" />

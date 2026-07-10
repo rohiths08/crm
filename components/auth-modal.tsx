@@ -80,7 +80,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
           >
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 rounded-full p-2 text-gray-400 hover:bg-white/10 hover:text-white transition-colors"
+              className="absolute right-4 top-4 rounded-full p-2 text-gray-400 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
             >
               <X className="h-5 w-5" />
             </button>
@@ -129,7 +129,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full rounded-lg bg-white py-2.5 font-semibold text-black hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+                className="w-full rounded-lg bg-white py-2.5 font-semibold text-black hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {isLogin ? 'Sign In' : 'Sign Up'}
@@ -144,7 +144,7 @@ export function AuthModal({ isOpen, onClose, onSuccess }: AuthModalProps) {
                   setIsLogin(!isLogin)
                   setError('')
                 }}
-                className="font-medium text-white hover:underline"
+                className="font-medium text-white hover:underline cursor-pointer"
               >
                 {isLogin ? 'Sign up' : 'Sign in'}
               </button>

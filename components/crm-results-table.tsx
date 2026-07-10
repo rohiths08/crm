@@ -190,7 +190,7 @@ export function CRMResultsTable({ isVisible, records }: CRMResultsTableProps) {
               {selectedStatus && (
                 <button
                   onClick={() => setSelectedStatus(null)}
-                  className="text-xs text-accent hover:underline"
+                  className="text-xs text-accent hover:underline cursor-pointer"
                 >
                   Reset Filter
                 </button>
@@ -246,7 +246,7 @@ export function CRMResultsTable({ isVisible, records }: CRMResultsTableProps) {
               {selectedSource && (
                 <button
                   onClick={() => setSelectedSource(null)}
-                  className="text-xs text-accent hover:underline"
+                  className="text-xs text-accent hover:underline cursor-pointer"
                 >
                   Reset Filter
                 </button>
@@ -301,13 +301,13 @@ export function CRMResultsTable({ isVisible, records }: CRMResultsTableProps) {
             {selectedStatus && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-700 dark:text-blue-400 border border-blue-500/20">
                 Status: {selectedStatus}
-                <button onClick={() => setSelectedStatus(null)} className="hover:text-red-500 ml-1 font-bold text-sm">×</button>
+                <button onClick={() => setSelectedStatus(null)} className="hover:text-red-500 ml-1 font-bold text-sm cursor-pointer">×</button>
               </span>
             )}
             {selectedSource && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-500/10 text-green-700 dark:text-green-400 border border-green-500/20">
                 Source: {selectedSource}
-                <button onClick={() => setSelectedSource(null)} className="hover:text-red-500 ml-1 font-bold text-sm">×</button>
+                <button onClick={() => setSelectedSource(null)} className="hover:text-red-500 ml-1 font-bold text-sm cursor-pointer">×</button>
               </span>
             )}
           </div>

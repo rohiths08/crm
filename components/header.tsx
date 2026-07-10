@@ -21,7 +21,7 @@ export function Header({ user, activeTab, onNavClick, onLoginClick, onLogout }: 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-black/10 dark:border-white/10 bg-white/50 dark:bg-black/50 backdrop-blur-md transition-colors">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <button onClick={() => onNavClick('home')} className="flex items-center gap-2 hover:opacity-80 transition-opacity focus:outline-none">
+        <button onClick={() => onNavClick('home')} className="flex items-center gap-2 hover:opacity-80 transition-opacity focus:outline-none cursor-pointer">
           <Hexagon className="h-6 w-6 text-black dark:text-white" fill="currentColor" />
           <span className="text-xl font-bold tracking-tight text-black dark:text-white">GrowEasy</span>
         </button>
@@ -29,7 +29,7 @@ export function Header({ user, activeTab, onNavClick, onLoginClick, onLogout }: 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600 dark:text-gray-400">
           <button 
             onClick={() => onNavClick('home')} 
-            className={`hover:text-black dark:hover:text-white transition-colors ${
+            className={`hover:text-black dark:hover:text-white transition-colors cursor-pointer ${
               activeTab === 'home' ? 'text-black dark:text-white font-semibold' : ''
             }`}
           >
@@ -37,25 +37,25 @@ export function Header({ user, activeTab, onNavClick, onLoginClick, onLogout }: 
           </button>
           <button 
             onClick={() => onNavClick('home', 'features')} 
-            className="hover:text-black dark:hover:text-white transition-colors"
+            className="hover:text-black dark:hover:text-white transition-colors cursor-pointer"
           >
             Features
           </button>
           <button 
             onClick={() => onNavClick('home', 'solution')} 
-            className="hover:text-black dark:hover:text-white transition-colors"
+            className="hover:text-black dark:hover:text-white transition-colors cursor-pointer"
           >
             Solution
           </button>
           <button 
             onClick={() => onNavClick('home', 'about')} 
-            className="hover:text-black dark:hover:text-white transition-colors"
+            className="hover:text-black dark:hover:text-white transition-colors cursor-pointer"
           >
             About Us
           </button>
           <button 
             onClick={() => onNavClick('upload')} 
-            className={`hover:text-black dark:hover:text-white transition-colors ${
+            className={`hover:text-black dark:hover:text-white transition-colors cursor-pointer ${
               activeTab === 'upload' ? 'text-black dark:text-white font-semibold' : ''
             }`}
           >
@@ -67,7 +67,7 @@ export function Header({ user, activeTab, onNavClick, onLoginClick, onLogout }: 
           {mounted && (
             <button
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              className="rounded-full p-2 text-gray-500 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white transition-colors"
+              className="rounded-full p-2 text-gray-500 hover:bg-black/5 dark:hover:bg-white/10 hover:text-black dark:hover:text-white transition-colors cursor-pointer"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
@@ -82,7 +82,7 @@ export function Header({ user, activeTab, onNavClick, onLoginClick, onLogout }: 
                 </div>
                 <button
                   onClick={onLogout}
-                  className="rounded-full p-2 text-gray-500 hover:bg-red-500/10 hover:text-red-500 transition-colors"
+                  className="rounded-full p-2 text-gray-500 hover:bg-red-500/10 hover:text-red-500 transition-colors cursor-pointer"
                   title="Logout"
                 >
                   <LogOut className="h-4 w-4" />
@@ -91,7 +91,7 @@ export function Header({ user, activeTab, onNavClick, onLoginClick, onLogout }: 
             ) : (
               <button
                 onClick={onLoginClick}
-                className="rounded-lg bg-black dark:bg-white px-4 py-1.5 text-sm font-medium text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+                className="rounded-lg bg-black dark:bg-white px-4 py-1.5 text-sm font-medium text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors cursor-pointer"
               >
                 Login
               </button>
