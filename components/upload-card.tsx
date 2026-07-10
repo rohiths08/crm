@@ -82,7 +82,7 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
               <CheckCircle2 className="h-7 w-7 text-accent" />
             </motion.div>
             <div className="min-w-0 flex-1">
-              <motion.h3 
+              <motion.h3
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.1 }}
@@ -90,7 +90,7 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
               >
                 {uploadedFile.name}
               </motion.h3>
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.15 }}
@@ -99,13 +99,13 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
                 <span className="flex items-center gap-1">
                   <span className="text-accent">•</span> {(uploadedFile.size / 1024).toFixed(2)} KB
                 </span>
-                <motion.span 
+                <motion.span
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 }}
                   className="flex items-center gap-1 text-accent font-medium"
                 >
-                  <motion.div 
+                  <motion.div
                     animate={{ scale: [1, 1.3, 1] }}
                     transition={{ duration: 0.6, repeat: Infinity }}
                     className="h-2 w-2 rounded-full bg-accent"
@@ -137,11 +137,10 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
     >
       <div
         {...getRootProps()}
-        className={`relative overflow-hidden rounded-xl border-2 border-dashed p-12 sm:p-16 text-center transition-all duration-300 ${
-          isDragActive
+        className={`relative overflow-hidden rounded-xl border-2 border-dashed p-12 sm:p-16 text-center transition-all duration-300 ${isDragActive
             ? 'border-accent bg-accent/15 shadow-lg shadow-accent/20 scale-[1.01]'
             : 'border-border/60 bg-card/40 hover:border-accent/50 hover:bg-card/60 hover:shadow-md'
-        } ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}`}
+          } ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : 'cursor-pointer'}`}
       >
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-accent/0 pointer-events-none" />
@@ -155,15 +154,13 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
             transition={{ duration: isDragActive ? 0.3 : 2.5, repeat: Infinity, ease: 'easeInOut' }}
             className="flex justify-center"
           >
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.08 }}
-              className={`flex h-20 w-20 items-center justify-center rounded-2xl transition-all ${
-                isDragActive ? 'bg-accent/30 shadow-lg shadow-accent/30' : 'bg-gradient-to-br from-accent/15 to-accent/5 hover:from-accent/20 hover:to-accent/10'
-              }`}
+              className={`flex h-20 w-20 items-center justify-center rounded-2xl transition-all ${isDragActive ? 'bg-accent/30 shadow-lg shadow-accent/30' : 'bg-gradient-to-br from-accent/15 to-accent/5 hover:from-accent/20 hover:to-accent/10'
+                }`}
             >
-              <Upload className={`h-10 w-10 transition-colors ${
-                isDragActive ? 'text-accent scale-110' : 'text-accent/70'
-              }`} />
+              <Upload className={`h-10 w-10 transition-colors ${isDragActive ? 'text-accent scale-110' : 'text-accent/70'
+                }`} />
             </motion.div>
           </motion.div>
 
@@ -175,8 +172,8 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
 
           {/* Button */}
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-            <Button 
-              disabled={disabled} 
+            <Button
+              disabled={disabled}
               size="lg"
               onClick={open}
               className="font-medium"
@@ -188,8 +185,8 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
           {/* Quick Badges */}
           <div className="flex flex-wrap justify-center gap-3 sm:gap-4 pt-2">
             {quickBadges.map((badge, idx) => (
-              <motion.div 
-                key={badge} 
+              <motion.div
+                key={badge}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
@@ -199,20 +196,20 @@ export function UploadCard({ onFileSelect, disabled = false }: UploadCardProps) 
               </motion.div>
             ))}
           </div>
-          
+
           {/* File Info */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
             className="space-y-1 pt-2 text-xs text-muted-foreground/60"
           >
             <p>Supported: CSV only</p>
-            <p>Maximum size: 25 MB</p>
+            <p>Maximum size: 2 MB</p>
           </motion.div>
 
           {/* Supported Sources */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.25 }}
