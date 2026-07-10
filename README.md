@@ -168,7 +168,6 @@ To ensure consistent, high-fidelity CRM data generation, the system utilizes a s
 
 ---
 
-## Deployment Links
+## Deployment Link
+- Link:[crm-sand-sigma.vercel.app](https://crm-sand-sigma.vercel.app/)
 
-- **Frontend Deployment:** [https://groweasy.vercel.app](https://groweasy.vercel.app) *(Placeholder)*
-- **Backend API Deployment:** [https://api.groweasy.app](https://api.groweasy.app) *(Placeholder)*
