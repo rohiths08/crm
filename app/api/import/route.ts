@@ -5,7 +5,8 @@ export async function POST(req: Request) {
     const formData = await req.formData();
     
     // Forward the multipart form data to the actual backend
-    const response = await fetch('http://127.0.0.1:3001/api/import', {
+    const backendBaseUrl = process.env.BACKEND_URL || 'http://127.0.0.1:3001';
+    const response = await fetch(`${backendBaseUrl}/api/import`, {
       method: 'POST',
       body: formData,
     });

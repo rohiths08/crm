@@ -128,6 +128,20 @@ To ensure consistent, high-fidelity CRM data generation, the system utilizes a s
 - **Frontend tests:** Run `npm run test` from the root directory.
 - **Backend tests:** Run `npm run test` from the `/backend` directory.
 
+### 4. Running with Docker
+You can build and run both the frontend and backend services containerized on a shared network using Docker Compose:
+
+1. Ensure your Gemini API Key is configured in `backend/.env`.
+2. From the root directory, build and start the containers in detached mode:
+   ```bash
+   docker compose up --build -d
+   ```
+3. Access the frontend app at [http://localhost:3000](http://localhost:3000) and the backend API at `http://localhost:3001`.
+4. To stop the running containers, run:
+   ```bash
+   docker compose down
+   ```
+
 ---
 
 ## API Endpoints
