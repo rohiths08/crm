@@ -59,6 +59,16 @@ export default function Page() {
     }
   }, [user])
 
+  const handleHomeClick = () => {
+    setSelectedFile(null)
+    setFileUploaded(false)
+    setShowPreview(false)
+    setIsImporting(false)
+    setImportComplete(false)
+    setImportResults(null)
+    setImportError(null)
+  }
+
   const handleFileSelect = (file: File) => {
     setSelectedFile(file)
     setFileUploaded(true)
@@ -175,11 +185,12 @@ export default function Page() {
           localStorage.removeItem('user')
           setUser(null)
         }}
+        onHomeClick={handleHomeClick}
       />
 
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 flex flex-col items-center">
+      <main className={`mx-auto px-4 py-8 sm:px-6 lg:px-8 flex flex-col items-center transition-all duration-300 w-full ${fileUploaded || importComplete ? 'max-w-[1600px]' : 'max-w-6xl'}`}>
         {/* Page Header */}
-        {!fileUploaded && !isImporting && !importComplete && (
+        {!user && !fileUploaded && !isImporting && !importComplete && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -199,7 +210,7 @@ export default function Page() {
         )}
 
         {/* Capabilities on Home Page */}
-        {!fileUploaded && !isImporting && !importComplete && (
+        {false && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -216,7 +227,7 @@ export default function Page() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="relative w-full max-w-6xl rounded-[32px] border border-black/5 dark:border-white/10 bg-white dark:bg-[#111111]/80 shadow-2xl dark:shadow-2xl overflow-hidden backdrop-blur-3xl p-8 md:p-12 mb-32 transition-colors"
+            className={`relative w-full rounded-[32px] border border-black/5 dark:border-white/10 bg-white dark:bg-[#111111]/80 shadow-2xl dark:shadow-2xl overflow-hidden backdrop-blur-3xl p-8 md:p-12 mb-32 transition-all duration-300 ${fileUploaded || importComplete ? 'max-w-[1600px]' : 'max-w-6xl'}`}
             style={{ boxShadow: '0 0 80px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.1)' }}
           >
             {/* Dashboard Window Header (Fake Mac buttons) */}
@@ -356,7 +367,7 @@ export default function Page() {
 
         {/* Recent Uploaded Files & Capabilities Side-by-Side (Logged In) */}
         {user && (
-          <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24 items-start">
+          <div className={`w-full grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24 items-start transition-all duration-300 ${fileUploaded || importComplete ? 'max-w-[1600px]' : 'max-w-6xl'}`}>
             <div className="lg:col-span-2">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -433,7 +444,7 @@ export default function Page() {
         )}
 
         {/* Marketing Sections */}
-        {true && (
+        {false && (
           <div className="w-full max-w-5xl space-y-32 py-16">
             <motion.section 
               id="features"

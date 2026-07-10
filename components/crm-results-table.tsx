@@ -4,12 +4,12 @@ import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import { Button } from './ui/button'
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef } from 'react'
 
 const columnHelper = createColumnHelper<any>()
 
@@ -31,42 +31,52 @@ const columns = [
   columnHelper.accessor('created_at', {
     cell: (info) => <span className="text-xs">{info.getValue()}</span>,
     header: 'Created At',
+    size: 120,
   }),
   columnHelper.accessor('name', {
     cell: (info) => <span className="font-medium">{info.getValue()}</span>,
     header: 'Lead Name',
+    size: 150,
   }),
   columnHelper.accessor('email', {
     cell: (info) => <span className="text-accent text-xs">{info.getValue()}</span>,
     header: 'Email',
+    size: 200,
   }),
   columnHelper.accessor('country_code', {
     cell: (info) => <span className="text-xs">{info.getValue()}</span>,
     header: 'Country Code',
+    size: 80,
   }),
   columnHelper.accessor('mobile_without_country_code', {
     cell: (info) => <span className="text-xs">{info.getValue()}</span>,
     header: 'Mobile Number',
+    size: 120,
   }),
   columnHelper.accessor('company', {
     cell: (info) => <span className="text-sm">{info.getValue()}</span>,
     header: 'Company',
+    size: 150,
   }),
   columnHelper.accessor('city', {
     cell: (info) => <span className="text-xs">{info.getValue()}</span>,
     header: 'City',
+    size: 100,
   }),
   columnHelper.accessor('state', {
     cell: (info) => <span className="text-xs">{info.getValue()}</span>,
     header: 'State',
+    size: 80,
   }),
   columnHelper.accessor('country', {
     cell: (info) => <span className="text-xs">{info.getValue()}</span>,
     header: 'Country',
+    size: 100,
   }),
   columnHelper.accessor('lead_owner', {
     cell: (info) => <span className="text-xs">{info.getValue()}</span>,
     header: 'Lead Owner',
+    size: 120,
   }),
   columnHelper.accessor('crm_status', {
     cell: (info) => (
@@ -79,10 +89,12 @@ const columns = [
       </span>
     ),
     header: 'CRM Status',
+    size: 180,
   }),
   columnHelper.accessor('crm_note', {
-    cell: (info) => <span className="text-xs text-muted-foreground max-w-xs truncate">{info.getValue()}</span>,
+    cell: (info) => <span className="text-xs text-muted-foreground max-w-sm truncate">{info.getValue()}</span>,
     header: 'CRM Note',
+    size: 250,
   }),
   columnHelper.accessor('data_source', {
     cell: (info) => (
@@ -91,10 +103,12 @@ const columns = [
       </span>
     ),
     header: 'Data Source',
+    size: 130,
   }),
   columnHelper.accessor('possession_time', {
     cell: (info) => <span className="text-xs">{info.getValue()}</span>,
     header: 'Possession Time',
+    size: 120,
   }),
 ]
 
@@ -106,6 +120,7 @@ interface CRMResultsTableProps {
 export function CRMResultsTable({ isVisible, records }: CRMResultsTableProps) {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
   const [selectedSource, setSelectedSource] = useState<string | null>(null)
+  const parentRef = useRef<HTMLDivElement>(null)
 
   // Filter records based on selected status and/or source
   const filteredRecords = useMemo(() => {
@@ -123,8 +138,22 @@ export function CRMResultsTable({ isVisible, records }: CRMResultsTableProps) {
     data: filteredRecords,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   })
+
+  const { rows: flatRows } = table.getRowModel()
+
+  const rowVirtualizer = useVirtualizer({
+    count: flatRows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 45,
+    overscan: 10,
+  })
+
+  const virtualItems = rowVirtualizer.getVirtualItems()
+  const totalSize = rowVirtualizer.getTotalSize()
+
+  const paddingTop = virtualItems.length > 0 ? virtualItems[0].start : 0
+  const paddingBottom = virtualItems.length > 0 ? totalSize - virtualItems[virtualItems.length - 1].end : 0
 
   const statusData = useMemo(() => {
     const counts = records.reduce((acc, curr) => {
@@ -300,19 +329,24 @@ export function CRMResultsTable({ isVisible, records }: CRMResultsTableProps) {
       <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
         <div className="border-b border-border bg-card/50 p-4 flex justify-between items-center">
           <h3 className="font-semibold text-foreground">Imported Records</h3>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground font-medium">
             Showing {filteredRecords.length} of {records.length} records
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs">
-            <thead>
-              <tr className="border-b border-border bg-card/50">
+        <div 
+          ref={parentRef} 
+          className="overflow-auto max-h-[450px] relative border-b border-border"
+          style={{ scrollbarGutter: 'stable' }}
+        >
+          <table className="w-full text-xs table-fixed">
+            <thead className="sticky top-0 z-10 bg-card/90 backdrop-blur-sm shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)]">
+              <tr className="border-b border-border">
                 {table.getHeaderGroups()[0].headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-3 text-left font-medium text-muted-foreground whitespace-nowrap"
+                    className="px-4 py-3 text-left font-semibold text-muted-foreground whitespace-nowrap bg-card/95 select-none"
+                    style={{ width: header.getSize() }}
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </th>
@@ -327,45 +361,39 @@ export function CRMResultsTable({ isVisible, records }: CRMResultsTableProps) {
                   </td>
                 </tr>
               ) : (
-                table.getRowModel().rows.map((row) => (
-                  <tr key={row.id} className="border-b border-border/50 hover:bg-card/50 transition-colors">
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className="px-4 py-3 whitespace-nowrap">
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </td>
-                    ))}
-                  </tr>
-                ))
+                <>
+                  {paddingTop > 0 && (
+                    <tr>
+                      <td style={{ height: `${paddingTop}px` }} colSpan={columns.length} />
+                    </tr>
+                  )}
+                  {virtualItems.map((virtualRow) => {
+                    const row = flatRows[virtualRow.index]
+                    return (
+                      <tr 
+                        key={row.id} 
+                        ref={rowVirtualizer.measureElement}
+                        data-index={virtualRow.index}
+                        className="border-b border-border/50 hover:bg-card/50 transition-colors"
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <td key={cell.id} className="px-4 py-3 whitespace-nowrap overflow-hidden text-ellipsis">
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </td>
+                        ))}
+                      </tr>
+                    )
+                  })}
+                  {paddingBottom > 0 && (
+                    <tr>
+                      <td style={{ height: `${paddingBottom}px` }} colSpan={columns.length} />
+                    </tr>
+                  )}
+                </>
               )}
             </tbody>
           </table>
         </div>
-
-        {filteredRecords.length > 0 && (
-          <div className="border-t border-border bg-card/50 px-4 py-4 flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-            </span>
-            <div className="flex gap-2">
-              <Button
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-                variant="outline"
-                size="sm"
-              >
-                Previous
-              </Button>
-              <Button
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-                variant="outline"
-                size="sm"
-              >
-                Next
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
