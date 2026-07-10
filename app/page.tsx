@@ -16,6 +16,7 @@ import { CapabilityBadges } from '@/components/capability-badges'
 import Papa from 'papaparse'
 
 export default function Page() {
+  const [activeTab, setActiveTab] = useState<'home' | 'upload'>('home')
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [fileUploaded, setFileUploaded] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
@@ -175,22 +176,38 @@ export default function Page() {
     document.body.removeChild(link)
   }
 
+  const handleNavClick = (tab: 'home' | 'upload', sectionId?: string) => {
+    setActiveTab(tab)
+    if (sectionId) {
+      setTimeout(() => {
+        const element = document.getElementById(sectionId)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-[#050505] text-black dark:text-white font-sans selection:bg-black/10 dark:selection:bg-white/20 transition-colors">
       <Header 
         user={user} 
+        activeTab={activeTab}
+        onNavClick={handleNavClick}
         onLoginClick={() => setIsAuthModalOpen(true)} 
         onLogout={() => {
           localStorage.removeItem('token')
           localStorage.removeItem('user')
           setUser(null)
+          setActiveTab('home')
         }}
-        onHomeClick={handleHomeClick}
       />
 
       <main className={`mx-auto px-4 py-8 sm:px-6 lg:px-8 flex flex-col items-center transition-all duration-300 w-full ${fileUploaded || importComplete ? 'max-w-[1600px]' : 'max-w-6xl'}`}>
-        {/* Page Header */}
-        {!user && !fileUploaded && !isImporting && !importComplete && (
+        {/* Page Header (Home tab only) */}
+        {activeTab === 'home' && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -199,9 +216,8 @@ export default function Page() {
           >
             <HeroSection 
               onStartClick={() => {
-                if (user) {
-                  document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' })
-                } else {
+                setActiveTab('upload')
+                if (!user) {
                   setIsAuthModalOpen(true)
                 }
               }}
@@ -210,7 +226,7 @@ export default function Page() {
         )}
 
         {/* Capabilities on Home Page */}
-        {false && (
+        {activeTab === 'home' && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -220,8 +236,8 @@ export default function Page() {
           </motion.div>
         )}
 
-        {/* Dashboard Wrapper */}
-        {user && (
+        {/* Dashboard Wrapper (Upload Files tab only) */}
+        {activeTab === 'upload' && (
           <motion.div
             id="upload-section"
             initial={{ opacity: 0, y: 40 }}
@@ -238,135 +254,134 @@ export default function Page() {
                <div className="ml-4 text-xs text-gray-500 font-medium">GrowEasy</div>
             </div>
 
-        {/* Upload Card - Main Focus */}
-        {(!isImporting && !importComplete) && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mb-12 relative"
-          >
-            {!user && (
-              <div 
-                className="absolute inset-0 z-50 cursor-pointer"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsAuthModalOpen(true)
-                }}
-              />
-            )}
-            <UploadCard onFileSelect={handleFileSelect} disabled={fileUploaded} />
-          </motion.div>
-        )}
-
-        {importError && (
-          <div className="mb-6 p-4 rounded-md bg-destructive/15 text-destructive text-sm font-medium border border-destructive/20">
-            Error: {importError}
-          </div>
-        )}
-
-        {/* CSV Preview */}
-        {(fileUploaded && !isImporting && !importComplete) && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-3 mb-6"
-          >
-            <h3 className="text-sm font-semibold text-foreground">Preview</h3>
-            <CSVPreviewTable isVisible={true} headers={previewHeaders} rows={previewRows} />
-          </motion.div>
-        )}
-
-        {/* Confirm Import Button */}
-        {fileUploaded && !isImporting && !importComplete && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex gap-2 mb-12"
-          >
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleUploadAnother}
-            >
-              Choose Another
-            </Button>
-            <Button
-              size="sm"
-              onClick={handleConfirmImport}
-            >
-              Confirm Import
-            </Button>
-          </motion.div>
-        )}
-
-        {/* Import Progress */}
-        {isImporting && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-12"
-          >
-            <ImportProgress isVisible={true} isImporting={isImporting} />
-          </motion.div>
-        )}
-
-        {/* Results Dashboard */}
-        {importComplete && importResults && (
-          <>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="mb-12"
-            >
-              <SummaryCards isVisible={true} summary={importResults.data?.summary} />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="space-y-3 mb-12"
-            >
-              <h3 className="text-sm font-semibold text-foreground">Imported Records</h3>
-              <CRMResultsTable isVisible={true} records={importResults.data?.records || []} />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="mb-12"
-            >
-              <SkippedRecords isVisible={true} skipped={importResults.data?.skipped || []} />
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="flex gap-2 pb-12"
-            >
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleUploadAnother}
+            {/* Upload Card - Main Focus */}
+            {(!isImporting && !importComplete) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="mb-12 relative"
               >
-                Upload Another
-              </Button>
-              <Button size="sm" onClick={handleExportResults}>Export Results</Button>
-            </motion.div>
-          </>
-        )}
+                {!user && (
+                  <div 
+                    className="absolute inset-0 z-50 cursor-pointer"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setIsAuthModalOpen(true)
+                    }}
+                  />
+                )}
+                <UploadCard onFileSelect={handleFileSelect} disabled={fileUploaded} />
+              </motion.div>
+            )}
 
+            {user && importError && (
+              <div className="mb-6 p-4 rounded-md bg-destructive/15 text-destructive text-sm font-medium border border-destructive/20">
+                Error: {importError}
+              </div>
+            )}
+
+            {/* CSV Preview */}
+            {user && (fileUploaded && !isImporting && !importComplete) && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="space-y-3 mb-6"
+              >
+                <h3 className="text-sm font-semibold text-foreground">Preview</h3>
+                <CSVPreviewTable isVisible={true} headers={previewHeaders} rows={previewRows} />
+              </motion.div>
+            )}
+
+            {/* Confirm Import Button */}
+            {user && fileUploaded && !isImporting && !importComplete && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex gap-2 mb-12"
+              >
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleUploadAnother}
+                >
+                  Choose Another
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleConfirmImport}
+                >
+                  Confirm Import
+                </Button>
+              </motion.div>
+            )}
+
+            {/* Import Progress */}
+            {user && isImporting && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mb-12"
+              >
+                <ImportProgress isVisible={true} isImporting={isImporting} />
+              </motion.div>
+            )}
+
+            {/* Results Dashboard */}
+            {user && importComplete && importResults && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="mb-12"
+                >
+                  <SummaryCards isVisible={true} summary={importResults.data?.summary} />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="space-y-3 mb-12"
+                >
+                  <h3 className="text-sm font-semibold text-foreground">Imported Records</h3>
+                  <CRMResultsTable isVisible={true} records={importResults.data?.records || []} />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="mb-12"
+                >
+                  <SkippedRecords isVisible={true} skipped={importResults.data?.skipped || []} />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex gap-2 pb-12"
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleUploadAnother}
+                  >
+                    Upload Another
+                  </Button>
+                  <Button size="sm" onClick={handleExportResults}>Export Results</Button>
+                </motion.div>
+              </>
+            )}
           </motion.div>
         )}
 
-        {/* Recent Uploaded Files & Capabilities Side-by-Side (Logged In) */}
-        {user && (
+        {/* Recent Uploaded Files & Capabilities Side-by-Side (Logged In, Upload Files tab only) */}
+        {user && activeTab === 'upload' && (
           <div className={`w-full grid grid-cols-1 lg:grid-cols-3 gap-8 mb-24 items-start transition-all duration-300 ${fileUploaded || importComplete ? 'max-w-[1600px]' : 'max-w-6xl'}`}>
             <div className="lg:col-span-2">
               <motion.div
@@ -443,8 +458,8 @@ export default function Page() {
           </div>
         )}
 
-        {/* Marketing Sections */}
-        {false && (
+        {/* Marketing Sections (Home tab only) */}
+        {activeTab === 'home' && (
           <div className="w-full max-w-5xl space-y-32 py-16">
             <motion.section 
               id="features"
@@ -524,9 +539,30 @@ export default function Page() {
               <div className="space-y-4">
                 <h4 className="font-semibold text-black dark:text-white">Product</h4>
                 <ul className="space-y-2 text-sm text-gray-500">
-                  <li><a href="#features" className="hover:text-black dark:hover:text-white transition-colors">Features</a></li>
-                  <li><a href="#solution" className="hover:text-black dark:hover:text-white transition-colors">Solution</a></li>
-                  <li><a href="#about" className="hover:text-black dark:hover:text-white transition-colors">About Us</a></li>
+                  <li>
+                    <button 
+                      onClick={() => handleNavClick('home', 'features')} 
+                      className="hover:text-black dark:hover:text-white transition-colors cursor-pointer text-left focus:outline-none"
+                    >
+                      Features
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => handleNavClick('home', 'solution')} 
+                      className="hover:text-black dark:hover:text-white transition-colors cursor-pointer text-left focus:outline-none"
+                    >
+                      Solution
+                    </button>
+                  </li>
+                  <li>
+                    <button 
+                      onClick={() => handleNavClick('home', 'about')} 
+                      className="hover:text-black dark:hover:text-white transition-colors cursor-pointer text-left focus:outline-none"
+                    >
+                      About Us
+                    </button>
+                  </li>
                 </ul>
               </div>
               <div className="space-y-4">
